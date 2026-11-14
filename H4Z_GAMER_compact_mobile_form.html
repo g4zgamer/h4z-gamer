@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>H4Z GAMER - Nickname Generator</title>
+<style>
+:root{--bg:#080808;--panel:#202020;--panel2:#111;--text:#f5f5f5;--muted:#aaa;--line:#353535;--red:#ed303b;--red2:#d92732}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif}
+body.light{--bg:#f4f4f4;--panel:#fff;--panel2:#eee;--text:#171717;--muted:#555;--line:#ccc}
+header{height:90px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+.logo{font-size:30px;font-weight:bold;letter-spacing:.5px}.logo span{color:var(--red)}
+.head-actions{display:flex;gap:12px}
+.icon-btn{width:62px;height:62px;border:0;border-radius:15px;background:var(--panel);color:var(--text);font-size:28px;cursor:pointer}
+main{width:100%;max-width:760px;margin:0 auto;padding:0 12px 40px}
+.intro{text-align:center;color:var(--muted);font-size:20px;line-height:1.55;margin:4px 0 42px}
+.input-card{width:100%;background:var(--panel);border:2px solid var(--line);border-radius:20px;padding:14px 14px 15px}
+.input-row{display:flex;gap:9px;align-items:center}
+input{display:block;width:100%;min-width:0;flex:1;height:66px;background:var(--bg);border:2px solid var(--line);border-radius:13px;color:var(--text);font:clamp(19px,5.4vw,25px) Georgia,serif;padding:0 15px;outline:none}
+input:focus{border-color:#555}
+.clear{height:66px;width:48px;flex:0 0 48px;border:0;border-radius:13px;background:#444;color:white;font-size:28px;cursor:pointer}
+.counter{text-align:right;color:var(--muted);font-size:15px;margin:7px 0 10px}
+.action-row{display:flex;gap:9px;align-items:stretch}
+.generate{height:56px;flex:1;min-width:0;border:0;border-radius:12px;background:var(--red);color:white;font:bold clamp(16px,4.6vw,20px) Georgia,serif;cursor:pointer}
+.visible{height:56px;flex:0 0 104px;border:0;border-radius:12px;background:var(--red);color:white;font:bold 14px Georgia,serif;cursor:pointer}
+button:active{transform:scale(.985)}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:16px 0 26px}
+.tab{min-height:54px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font:bold 14px Georgia,serif;cursor:pointer;padding:8px 3px}
+.tab.active{background:var(--red);border-color:var(--red);color:white}
+.tab-panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin:-12px 0 25px}
+.tab-panel.open{display:block}
+.option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.option{border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);padding:13px 8px;font-size:17px;cursor:pointer;overflow-wrap:anywhere}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:34px 0 22px;gap:10px}
+.section-head h2{font-size:28px;margin:0}.count{color:var(--muted);font-size:17px;white-space:nowrap}
+.name-list{display:flex;flex-direction:column;gap:16px}
+.name-item{min-height:112px;background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nickname{font-size:25px;overflow-wrap:anywhere;min-width:0}
+.copy-btn{flex:0 0 118px;height:66px;border:0;border-radius:12px;background:var(--red);color:#fff;font:20px Georgia,serif;cursor:pointer}
+.learn{display:block;width:100%;height:62px;margin:22px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;color:var(--text);font:bold 19px Georgia,serif;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#292929;color:white;padding:12px 18px;border-radius:30px;font:16px Arial,sans-serif;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+.toast.show{opacity:1}
+.menu{display:none;position:absolute;right:20px;top:82px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;z-index:5;min-width:150px}
+.menu.open{display:block}.menu button{display:block;width:100%;text-align:left;padding:12px;background:transparent;color:var(--text);border:0;font:17px Georgia,serif}
+.info{display:none;background:var(--panel);padding:16px;border-radius:14px;margin:15px 0;color:var(--muted);line-height:1.5}
+@media(max-width:520px){
+ header{height:88px;padding:0 18px}.logo{font-size:27px}.icon-btn{width:62px;height:62px}
+ main{padding:0 12px 32px}.intro{font-size:19px;margin:2px 0 34px}
+ .input-card{padding:14px 12px 15px}.input-row{gap:9px}
+ input{height:66px;font-size:clamp(19px,5.4vw,24px);padding:0 13px}.clear{width:48px;flex-basis:48px;height:66px}
+ .generate{height:56px;font-size:clamp(16px,4.6vw,19px)}.visible{height:56px;flex-basis:104px;font-size:14px}
+ .tabs{gap:7px}.tab{font-size:12px;min-height:52px}
+ .section-head h2{font-size:25px}.nickname{font-size:23px}.name-item{padding:18px 20px;min-height:110px}
+ .copy-btn{flex-basis:118px;height:66px;font-size:19px}
+}
+@media(max-width:370px){
+ main{padding-left:9px;padding-right:9px}
+ .input-card{padding:12px 9px 13px}
+ .input-row{gap:7px}
+ input{height:62px;padding:0 10px;font-size:19px}
+ .clear{height:62px;width:44px;flex-basis:44px}
+ .visible{height:52px;flex-basis:88px;font-size:12px}
+ .generate{height:52px;font-size:16px}
+ .tab{font-size:10px}
+ .copy-btn{flex-basis:90px}
+ .nickname{font-size:20px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">H4Z <span>GAMER</span></div>
+  <div class="head-actions">
+    <button class="icon-btn" id="themeBtn" aria-label="Change theme">☼</button>
+    <button class="icon-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  </div>
+  <div class="menu" id="menu">
+    <button data-info="home">Home</button><button data-info="about">About</button><button data-info="contact">Contact</button>
+  </div>
+</header>
+<main>
+  <p class="intro">Create stylish gaming nicknames with unique fonts, symbols and designs. Enter your name and explore your nickname styles.</p>
+  <section class="input-card">
+    <div class="input-row">
+      <input id="nameInput" maxlength="15" placeholder="Enter Your Name" autocomplete="off">
+      <button class="clear" id="clearBtn" aria-label="Clear name">×</button>
+    </div>
+    <div class="counter"><span id="counter">0</span>/15</div>
+    <div class="action-row">
+      <button class="generate" id="generateBtn">GENERATE</button>
+      <button class="visible" id="visibleBtn" title="Copy invisible space">VISIBLE</button>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs">
+    <button class="tab" data-tab="design">DESIGN</button>
+    <button class="tab" data-tab="fonts">FONTS</button>
+    <button class="tab" data-tab="symbols">SYMBOLS</button>
+    <button class="tab" data-tab="quick">QUICK WORDS</button>
+  </div>
+  <div class="tab-panel" id="design"><div class="option-grid" id="designOptions"></div></div>
+  <div class="tab-panel" id="fonts"><div class="option-grid" id="fontOptions"></div></div>
+  <div class="tab-panel" id="symbols"><div class="option-grid" id="symbolOptions"></div></div>
+  <div class="tab-panel" id="quick"><div class="option-grid" id="quickOptions"></div></div>
+
+  <div class="section-head"><h2>Nickname Designs</h2><span class="count" id="resultCount">22 Nicknames</span></div>
+  <div class="name-list" id="nameList"></div>
+  <button class="learn" id="learnBtn">LEARN MORE</button>
+  <div class="info" id="infoBox"></div>
+</main>
+<div class="toast" id="toast">Copied!</div>
+<script>
+const input=document.getElementById('nameInput');
+const list=document.getElementById('nameList');
+const toast=document.getElementById('toast');
+const invisibleSpace='ㅤ'; // Hangul filler character supplied in the chat
+let generatedMode=false, extraCount=0, toastTimer;
+
+const designs=[
+ ['乂 {n} 乂','乂','乂'],['〆 {n} 〆','〆','〆'],['꧁ {n} ꧂','꧁','꧂'],['♛ {n} ♛','♛','♛'],
+ ['『 {n} 』','『','』'],['么 {n} 么','么','么'],['★ {n} ★','★','★'],['ツ {n} ツ','ツ','ツ'],
+ ['亗 {n} 亗','亗','亗'],['彡 {n} 彡','彡','彡'],['༺ {n} ༻','༺','༻'],['࿐ {n} ࿐','࿐','࿐'],
+ ['メ {n} メ','メ','メ'],['◥ {n} ◤','◥','◤'],['乄 {n} 乄','乄','乄'],['♠ {n} ♠','♠','♠'],
+ ['⚡ {n} ⚡','⚡','⚡'],['☯ {n} ☯','☯','☯'],['• {n} •','•','•'],['×͜× {n} ×͜×','×͜×','×͜×'],
+ ['᭄ {n} ᭄','᭄','᭄'],['★彡 {n} 彡★','★彡','彡★']
+];
+const generatedStyles=[
+ n=>`乂 ${n} 乂`,n=>`亗 ${n} 亗`,n=>`꧁${n}꧂`,n=>`『${n}』`,n=>`♛ ${n} ♛`,
+ n=>`么${n}么`,n=>`彡${n}彡`,n=>`༺${n}༻`,n=>`ツ${n}ツ`,n=>`メ${n}メ`,
+ n=>`★ ${n} ★`,n=>`⚡${n}⚡`,n=>`〆${n}〆`,n=>`♠ ${n} ♠`,n=>`࿐${n}࿐`,
+ n=>`◥${n}◤`,n=>`᭄${n}᭄`,n=>`☯ ${n} ☯`,n=>`×͜× ${n} ×͜×`,n=>`★彡${n}彡★`
+];
+function currentName(){return input.value.trim()||'Your Name'}
+function showToast(message='Copied!'){
+ toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>toast.classList.remove('show'),1600);
+}
+async function copyText(text){
+ try{
+   if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(text);}
+   else{
+     const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';
+     document.body.appendChild(area);area.focus();area.select();
+     const ok=document.execCommand('copy');area.remove();if(!ok)throw new Error('copy failed');
+   }
+   showToast('Copied!');
+ }catch(e){showToast('Copy not supported here');}
+}
+function renderNames(items){
+ list.innerHTML='';
+ items.forEach(value=>{
+   const row=document.createElement('div');row.className='name-item';
+   const name=document.createElement('div');name.className='nickname';name.textContent=value;
+   const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='COPY';
+   btn.addEventListener('click',()=>copyText(value));
+   row.append(name,btn);list.appendChild(row);
+ });
+ document.getElementById('resultCount').textContent=items.length+' Nicknames';
+}
+function refreshNames(){
+ document.getElementById('counter').textContent=input.value.length;
+ extraCount=0;
+ if(generatedMode){
+   const n=currentName();renderNames(generatedStyles.map(fn=>fn(n)));
+ }else{
+   const n=currentName();renderNames(designs.map(d=>d[0].replaceAll('{n}',n)));
+ }
+ document.getElementById('learnBtn').style.display='block';
+}
+document.getElementById('generateBtn').addEventListener('click',()=>{
+ if(!input.value.trim()){showToast('Enter your name first');input.focus();return;}
+ generatedMode=true;extraCount=0;refreshNames();
+});
+input.addEventListener('input',refreshNames);
+document.getElementById('clearBtn').addEventListener('click',()=>{
+ input.value='';generatedMode=false;refreshNames();input.focus();
+});
+document.getElementById('learnBtn').addEventListener('click',()=>{
+ const n=currentName();const start=extraCount;const batch=[];
+ for(let i=0;i<20;i++){
+   const idx=(start+i)%generatedStyles.length;
+   batch.push(generatedStyles[idx](n)+(start+i>=generatedStyles.length?' ✦':''));
+ }
+ batch.forEach(value=>{
+   const row=document.createElement('div');row.className='name-item';
+   const name=document.createElement('div');name.className='nickname';name.textContent=value;
+   const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='COPY';btn.addEventListener('click',()=>copyText(value));
+   row.append(name,btn);list.appendChild(row);
+ });
+ extraCount+=20;
+ document.getElementById('resultCount').textContent=list.children.length+' Nicknames';
+});
+document.getElementById('visibleBtn').addEventListener('click',()=>copyText(invisibleSpace));
+
+document.querySelectorAll('.tab').forEach(btn=>{
+ btn.addEventListener('click',()=>{
+   const id=btn.dataset.tab, panel=document.getElementById(id), wasOpen=panel.classList.contains('open');
+   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('open'));
+   if(!wasOpen){btn.classList.add('active');panel.classList.add('open');}
+ });
+});
+const nameForOptions=()=>currentName();
+const designItems=['乂 {n} 乂','〆 {n} 〆','꧁ {n} ꧂','♛ {n} ♛','『 {n} 』','么 {n} 么','★ {n} ★','ツ {n} ツ','亗 {n} 亗','彡 {n} 彡','༺ {n} ༻','࿐ {n} ࿐','メ {n} メ','◥ {n} ◤','乄 {n} 乄','♠ {n} ♠'];
+designItems.forEach(v=>addOption('designOptions',v.replace('{n}',nameForOptions()),()=>copyText(v.replaceAll('{n}',nameForOptions()))));
+const fontSets=[
+ {label:'𝐁𝐨𝐥𝐝',upper:0x1D400,lower:0x1D41A},
+ {label:'𝘐𝘵𝘢𝘭𝘪𝘤',upper:0x1D434,lower:0x1D44E},
+ {label:'𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘',upper:0x1D468,lower:0x1D482},
+ {label:'𝙼𝚘𝚗𝚘',upper:0x1D670,lower:0x1D68A},
+ {label:'𝖲𝖺𝗇𝗌',upper:0x1D5A0,lower:0x1D5BA},
+ {label:'𝗕𝗼𝗹𝗱',upper:0x1D5D4,lower:0x1D5EE},
+ {label:'𝘚𝘭𝘢𝘯𝘵',upper:0x1D608,lower:0x1D622},
+ {label:'𝓢𝓬𝓻𝓲𝓹𝓽',upper:0x1D4D0,lower:0x1D4EA},
+ {label:'𝔉𝔯𝔞𝔨𝔱𝔲𝔯',upper:0x1D504,lower:0x1D51E},
+ {label:'𝕯𝖔𝖚𝖇𝖑𝖊',upper:0x1D538,lower:0x1D552}
+];
+function stylize(str,set){
+ return [...str].map(ch=>{
+   const c=ch.codePointAt(0);
+   if(c>=65&&c<=90)return String.fromCodePoint(set.upper+c-65);
+   if(c>=97&&c<=122)return String.fromCodePoint(set.lower+c-97);
+   return ch;
+ }).join('');
+}
+fontSets.forEach(set=>addOption('fontOptions',set.label,()=>copyText(stylize(nameForOptions(),set))));
+['乂','〆','꧁','꧂','♛','★','ツ','亗','彡','༺','༻','࿐','メ','◥','◤','♠','⚡','☯','么','᭄','×͜×','『','』','•'].forEach(s=>addOption('symbolOptions',s,()=>copyText(s)));
+['YT','GAMER','PRO','KING','QUEEN','亗','OP','亗 OP','LIVE','亗 YT','BOSS','LEGEND'].forEach(w=>addOption('quickOptions',w,()=>copyText(w+' '+nameForOptions())));
+function addOption(containerId,label,action){
+ const btn=document.createElement('button');btn.className='option';btn.textContent=label;btn.addEventListener('click',action);
+ document.getElementById(containerId).appendChild(btn);
+}
+document.getElementById('themeBtn').addEventListener('click',()=>{
+ document.body.classList.toggle('light');
+ document.getElementById('themeBtn').textContent=document.body.classList.contains('light')?'☾':'☼';
+});
+document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('menu').classList.toggle('open'));
+document.querySelectorAll('.menu button').forEach(btn=>btn.addEventListener('click',()=>{
+ const box=document.getElementById('infoBox');
+ const key=btn.dataset.info;
+ if(key==='home'){box.style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+ else{box.textContent=key==='about'?'H4Z GAMER helps you create stylish gaming nicknames with designs, fonts and symbols.':'Contact details can be added here when you are ready.';box.style.display='block';}
+ document.getElementById('menu').classList.remove('open');
+}));
+document.addEventListener('click',e=>{
+ if(!e.target.closest('#menu')&&!e.target.closest('#menuBtn'))document.getElementById('menu').classList.remove('open');
+});
+refreshNames();
+</script>
+</body>
+</html>
