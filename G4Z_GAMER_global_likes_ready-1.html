@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>G4Z GAMER - Nickname Generator</title>
+<style>
+:root{--bg:#080808;--panel:#202020;--panel2:#111;--text:#f5f5f5;--muted:#aaa;--line:#353535;--red:#ed303b;--red2:#d92732;--accent:var(--red);--accent-ink:#fff;--counter-green:#35c879;--counter-warn:#e5a33b;--counter-red:#ff4b55}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif}
+body.light{--bg:#f4f4f4;--panel:#fff;--panel2:#eee;--text:#171717;--muted:#555;--line:#ccc;--accent:#315fba;--accent-ink:#fff}
+header{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:relative}
+.logo{font-size:29px;font-weight:bold;letter-spacing:.5px}.logo span{color:var(--accent)}
+.head-actions{display:flex;gap:10px}
+.icon-btn{width:56px;height:56px;border:0;border-radius:14px;background:var(--panel);color:var(--text);font-size:26px;cursor:pointer}
+main{width:100%;max-width:1200px;margin:0 auto;padding:0 10px 40px}
+.intro{text-align:center;color:var(--muted);font-size:19px;line-height:1.5;margin:8px 0 28px}
+.input-card{width:100%;background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:14px;position:relative}
+.input-note{font:11px/1.35 Arial,sans-serif;color:var(--muted);margin:0 0 7px 3px}
+.input-note[hidden]{display:none}
+.input-row{display:flex;gap:9px;align-items:center}
+input{display:block;width:100%;min-width:0;flex:1;height:62px;background:var(--bg);border:2px solid var(--line);border-radius:12px;color:var(--text);font:clamp(18px,4.5vw,24px) Georgia,serif;padding:0 14px;outline:none}
+input:focus{border-color:#777}
+.clear{height:62px;width:48px;flex:0 0 48px;border:0;border-radius:12px;background:#444;color:white;font-size:27px;cursor:pointer}
+.counter-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin:7px 0 10px}.counter{text-align:right;color:var(--muted);font-size:14px;white-space:nowrap}.counter strong{font-weight:bold}.counter.green{color:var(--counter-green)}.counter.warning{color:var(--counter-warn)}.counter.red{color:var(--counter-red)}.game-hints{display:flex;flex-direction:column;gap:3px;min-width:0}.game-hint{font:11px/1.25 Arial,sans-serif;color:var(--muted);opacity:.78}.game-hint.alert{color:var(--counter-red);opacity:.9;font-weight:600}.game-hint[hidden]{display:none}.ascii-design{white-space:pre;overflow-x:auto;font: bold 13px/1.25 monospace;text-align:left}.option.ascii-design{font-size:12px}
+.action-row{display:flex;gap:9px;align-items:stretch}
+.generate{height:54px;flex:1;min-width:0;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font:bold 19px Georgia,serif;cursor:pointer}
+.visible{height:54px;flex:0 0 112px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font:bold 14px Georgia,serif;cursor:pointer}
+button:active{transform:scale(.985)}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:15px 0 24px}
+.tab{min-height:52px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--text);font:bold 13px Georgia,serif;cursor:pointer;padding:8px 3px}
+.tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.category-strip{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:2px 1px 12px;margin:0 0 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.category-strip::-webkit-scrollbar{display:none}
+.category-chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);padding:10px 16px;font: bold 11px Arial,sans-serif;letter-spacing:.5px;cursor:pointer}
+.category-chip.active{background:linear-gradient(100deg,var(--accent),#8b5cf6);border-color:transparent;color:var(--accent-ink)}
+.tab-panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:11px;margin:-10px 0 22px;max-height:440px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.tab-panel.open{display:block}
+.panel-search{width:100%;height:46px;min-height:46px;margin:0 0 11px;padding:0 13px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font:16px Arial,sans-serif;position:sticky;top:0;z-index:1}
+.option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.option{white-space:pre-wrap;min-height:48px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);padding:11px 8px;font-size:16px;cursor:pointer;overflow-wrap:anywhere;word-break:break-word}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin:28px 0 18px;gap:10px}
+.section-title-wrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+.section-head h2{font-size:26px;margin:0}
+.limit-badge{font:11px/1.25 Arial,sans-serif;color:var(--muted);letter-spacing:.2px}
+.count{color:var(--muted);font-size:15px;white-space:nowrap}
+.name-list{display:flex;flex-direction:column;gap:13px}
+.name-item{min-height:96px;background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:14px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.name-main{display:flex;flex-direction:column;gap:7px;min-width:0;flex:1}
+.card-cat-tag{display:inline-block;align-self:flex-start;font:9px/1 Arial,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+.nickname{font-size:23px;overflow-wrap:anywhere;word-break:break-word;min-width:0}
+.card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.react-btn{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:999px;padding:3px 9px;font:12px Arial,sans-serif;cursor:pointer;line-height:1.2}
+.react-btn.active{border-color:var(--accent);color:var(--text);background:rgba(255,255,255,0.06)}
+body.light .react-btn.active{background:rgba(0,0,0,0.05)}
+.copy-stat{font:11px Arial,sans-serif;color:var(--muted);opacity:.85;margin-left:2px}
+.copy-btn{flex:0 0 100px;height:56px;border:0;border-radius:11px;background:var(--accent);color:var(--accent-ink);font:18px Georgia,serif;cursor:pointer}
+.learn{display:block;width:100%;height:56px;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:13px;color:var(--text);font:bold 18px Georgia,serif;cursor:pointer}.learn:disabled{opacity:.55;cursor:not-allowed}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#292929;color:white;padding:12px 18px;border-radius:30px;font:15px Arial,sans-serif;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+.menu{display:none;position:absolute;right:18px;top:74px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;z-index:5;min-width:165px}
+.menu.open{display:block}.menu button{display:block;width:100%;text-align:left;padding:12px;background:transparent;color:var(--text);border:0;font:16px Georgia,serif;cursor:pointer}.menu button.restart-item{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;color:var(--accent)}.palette-box{margin:7px 4px 4px;padding:8px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}.palette-title{padding:3px 4px 9px;color:var(--muted);font:bold 12px Arial,sans-serif;letter-spacing:.6px}.color-palette{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:3px 4px 5px}.color-palette button{width:29px;height:29px;border:2px solid #fff;border-radius:50%;padding:0;cursor:pointer;justify-self:center;box-shadow:0 0 0 1px var(--line)}.color-palette button:focus{outline:2px solid var(--text);outline-offset:2px}.color-palette button[data-color="#ed303b"]{background:#ed303b}.color-palette button[data-color="#e5b72f"]{background:#e5b72f}.color-palette button[data-color="#20a765"]{background:#20a765}.color-palette button[data-color="#2878e5"]{background:#2878e5}
+.info{display:none;background:var(--panel);padding:16px;border-radius:14px;margin:15px 0;color:var(--muted);line-height:1.5}
+.letter-heading{grid-column:1/-1;color:var(--red);font-weight:bold;padding:8px 2px 2px;margin-top:5px;border-bottom:1px solid var(--line)}
+@media(max-width:520px){
+ header{height:78px;padding:0 12px}.logo{font-size:25px}.icon-btn{width:51px;height:51px}
+ main{width:100%;max-width:100%;padding:0 4px 30px}
+ .intro{font-size:17px;margin:8px 2px 22px}
+ .input-card{padding:11px 8px}
+ input{height:60px;font-size:clamp(17px,5vw,22px);padding:0 11px}
+ .clear{height:60px;width:45px;flex-basis:45px}
+ .generate,.visible{height:52px}.visible{flex-basis:100px;font-size:13px}
+ .tabs{gap:6px;margin:13px 0 22px}
+ .category-chip{padding:9px 14px;font-size:10px}.tab{font-size:11px;min-height:50px;padding:7px 1px}
+ .section-head h2{font-size:23px}.nickname{font-size:21px}
+ .name-item{padding:13px 12px;min-height:88px}.copy-btn{flex-basis:88px;height:52px;font-size:16px}
+ .tab-panel{max-height:55vh}.game-hint{font-size:10px}
+ .option{font-size:15px;padding:10px 6px}
+}
+@media(max-width:360px){
+ main{padding-left:4px;padding-right:4px}
+ .logo{font-size:22px}.head-actions{gap:7px}
+ .icon-btn{width:46px;height:46px}
+ .visible{flex-basis:84px;font-size:11px}
+ .tab{font-size:10px}
+ .copy-btn{flex-basis:78px}
+ .nickname{font-size:19px}
+}
+
+/* Modal Popup Styling */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:12px;backdrop-filter:blur(3px)}
+.modal-overlay[hidden]{display:none !important}
+.modal-card{width:100%;max-width:700px;max-height:85vh;background:var(--panel);border:2px solid var(--line);border-radius:20px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel2)}
+.modal-title-wrap h2{margin:0;font-size:22px}
+.modal-close{width:42px;height:42px;border:0;border-radius:50%;background:var(--panel);color:var(--text);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+.modal-close:hover{background:var(--accent);color:var(--accent-ink)}
+.modal-body{padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;flex:1;scrollbar-width:thin}
+.modal-empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:16px}
+.delete-btn{background:rgba(237,48,59,0.15)!important;border-color:var(--red)!important;color:var(--red)!important}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">G4Z <span>GAMER</span></div>
+  <div class="head-actions">
+    <button class="icon-btn" id="themeBtn" aria-label="Change theme">☼</button>
+    <button class="icon-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  </div>
+  <div class="menu" id="menu">
+    <button data-info="home">Home</button>
+    <button data-info="about">About</button>
+    <button data-info="contact">Contact</button>
+    <button type="button" id="savedMenuBtn">Pin 📌 (<span id="savedMenuCount">0</span>)</button>
+    <div class="palette-box">
+      <div class="palette-title">CHOOSE COLOR</div>
+      <div class="color-palette">
+        <button type="button" data-color="#ed303b" aria-label="Red"></button>
+        <button type="button" data-color="#e5b72f" aria-label="Yellow"></button>
+        <button type="button" data-color="#20a765" aria-label="Green"></button>
+        <button type="button" data-color="#2878e5" aria-label="Blue"></button>
+        <button type="button" data-color="#8b5cf6" aria-label="Purple"></button>
+        <button type="button" data-color="#ff7a00" aria-label="Orange"></button>
+        <button type="button" data-color="#ff4fa3" aria-label="Pink"></button>
+        <button type="button" data-color="#00bcd4" aria-label="Cyan"></button>
+        <button type="button" data-color="#00a6a6" aria-label="Teal"></button>
+        <button type="button" data-color="#a3a3a3" aria-label="Silver"></button>
+        <button type="button" data-color="#f5f5f5" aria-label="White"></button>
+        <button type="button" data-color="#a3e635" aria-label="Lime"></button>
+      </div>
+    </div>
+    <button type="button" class="restart-item" id="restartBtn">Restart</button>
+  </div>
+</header>
+<main>
+  <p class="intro">Create stylish gaming nicknames with unique fonts, symbols and designs. Enter your name and explore your nickname styles.</p>
+  <section class="input-card">
+    <div class="input-note" id="loveInputNote" hidden>You can enter full names or short initials for two people.</div>
+    <div class="input-row">
+      <input id="nameInput" maxlength="50" placeholder="Enter Your Name" autocomplete="off">
+      <button class="clear" id="clearBtn" aria-label="Clear name">×</button>
+    </div>
+    <div class="counter-row"><div class="game-hints" aria-live="polite"><div class="game-hint alert" id="limitError" hidden></div></div><div class="counter green" id="counterBox"><strong id="counter">0</strong></div></div>
+    <div class="action-row">
+      <button class="generate" id="generateBtn">GENERATE</button>
+      <button class="visible" id="visibleBtn" title="Copy invisible space">VISIBLE</button>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs">
+    <button class="tab" data-tab="design">DESIGN</button>
+    <button class="tab" data-tab="fonts">FONTS</button>
+    <button class="tab" data-tab="symbols">SYMBOLS</button>
+    <button class="tab" data-tab="spelling">SPELLING<br>DESIGN</button>
+  </div>
+  <nav class="category-strip" aria-label="Nickname categories">
+    <button class="category-chip active" type="button" data-category="ALL">ALL</button>
+    <button class="category-chip" type="button" data-category="PUBG">PUBG</button>
+    <button class="category-chip" type="button" data-category="FREE FIRE">FREE FIRE</button>
+    <button class="category-chip" type="button" data-category="BGMI">BGMI</button>
+    <button class="category-chip" type="button" data-category="LOVE">LOVE</button>
+    <button class="category-chip" type="button" data-category="BOY">BOY</button>
+    <button class="category-chip" type="button" data-category="ATTITUDE">ATTITUDE</button>
+    <button class="category-chip" type="button" data-category="POPULAR">POPULAR</button>
+    <button class="category-chip" type="button" data-category="SYMBOLS">SYMBOLS</button>
+  </nav>
+  <div class="tab-panel" id="design"><input class="panel-search" id="designName" maxlength="50" placeholder="Enter Name" aria-label="Design name"><div class="option-grid" id="designOptions"></div></div>
+  <div class="tab-panel" id="fonts"><input class="panel-search" id="fontsName" maxlength="50" placeholder="Enter Name" aria-label="Font name"><div class="option-grid" id="fontOptions"></div></div>
+  <div class="tab-panel" id="symbols"><input class="panel-search" id="symbolsSearch" placeholder="Search Symbols" aria-label="Search symbols"><div class="option-grid" id="symbolOptions"></div></div>
+  <div class="tab-panel" id="spelling"><input class="panel-search" id="spellingName" maxlength="50" placeholder="Enter Letter or Name" aria-label="Spelling design name"><div class="option-grid" id="spellingOptions"></div></div>
+
+  <div class="section-head">
+    <div class="section-title-wrap">
+      <h2>Nickname Designs</h2>
+      <div class="limit-badge" id="categoryLimitBadge">ALL Limit: up to 50 chars</div>
+    </div>
+    <span class="count" id="resultCount">22 Nicknames</span>
+  </div>
+  <div id="sharedLikeStatus" class="limit-badge" style="margin:-8px 0 12px">Global likes setup required</div>
+  <div class="name-list" id="nameList"></div>
+  <button class="learn" id="learnBtn">LEARN MORE</button>
+  <div class="info" id="infoBox"></div>
+</main>
+<div class="toast" id="toast">Copied!</div>
+
+<!-- Pinned / Saved Nicknames Modal Box -->
+<div class="modal-overlay" id="pinnedModal" hidden>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <h2>Pinned Nicknames</h2>
+        <div class="limit-badge" id="pinnedCountBadge">0 nicknames pinned</div>
+      </div>
+      <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">×</button>
+    </div>
+    <div class="modal-body" id="pinnedListContainer"></div>
+  </div>
+</div>
+
+<script>
+const input=document.getElementById('nameInput');
+const list=document.getElementById('nameList');
+const toast=document.getElementById('toast');
+const invisibleSpace='ㅤ';
+let generatedMode=false, toastTimer;
+const shownDesigns=new Set();
+
+// Persistent localStorage stats & saved nicknames per browser/device
+const STORAGE_KEY='g4z_gamer_card_stats_v2';
+const SAVED_STORAGE_KEY='g4z_gamer_saved_nicknames_v1';
+let cardStats={};
+let savedNicknames=[];
+let viewingSaved=false;
+try{
+ const saved=localStorage.getItem(STORAGE_KEY);
+ if(saved)cardStats=JSON.parse(saved)||{};
+}catch(e){cardStats={};}
+try{
+ const savedList=localStorage.getItem(SAVED_STORAGE_KEY);
+ if(savedList){
+  const parsed=JSON.parse(savedList);
+  if(Array.isArray(parsed))savedNicknames=parsed;
+ }
+}catch(e){savedNicknames=[];}
+function saveCardStats(){
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(cardStats));}catch(e){}
+}
+function persistSavedNicknames(){
+ try{localStorage.setItem(SAVED_STORAGE_KEY,JSON.stringify(savedNicknames));}catch(e){}
+ updateSavedMenuCount();
+}
+function updateSavedMenuCount(){
+ const badge=document.getElementById('savedMenuCount');
+ if(badge)badge.textContent=savedNicknames.length;
+}
+function isNicknameSaved(text){
+ return savedNicknames.some(item=>item.text===text);
+}
+function toggleSaveNickname(entry){
+ const idx=savedNicknames.findIndex(item=>item.text===entry.text);
+ if(idx!==-1){
+  savedNicknames.splice(idx,1);
+  persistSavedNicknames();
+  showToast('Removed from Save');
+  return false;
+ }else{
+  savedNicknames.unshift({text:entry.text,category:entry.category||'SAVED'});
+  persistSavedNicknames();
+  showToast('Saved!');
+  return true;
+ }
+}
+function getCardStat(key){
+ if(!cardStats[key]||typeof cardStats[key]!=='object'){
+  cardStats[key]={likes:0,dislikes:0,copies:0,vote:null};
+ }
+ const s=cardStats[key];
+ let vote=s.vote==='like'||s.vote==='dislike'?s.vote:null;
+ if(!vote){
+  if(s.liked)vote='like';
+  else if(s.disliked)vote='dislike';
+ }
+ return {
+  likes:Math.max(0,Number(s.likes)||0),
+  dislikes:Math.max(0,Number(s.dislikes)||0),
+  copies:Math.max(0,Number(s.copies)||0),
+  vote
+ };
+}
+
+const categoryConfig={
+ 'ALL':{limit:50,label:'ALL Limit: up to 50 chars (varies by game)'},
+ 'PUBG':{limit:14,label:'PUBG Limit: 14 characters'},
+ 'FREE FIRE':{limit:12,label:'FREE FIRE Limit: 12 characters'},
+ 'BGMI':{limit:14,label:'BGMI Limit: 14 characters'},
+ 'LOVE':{limit:16,label:'LOVE Limit: 16 characters'},
+ 'BOY':{limit:16,label:'BOY Limit: 16 characters'},
+ 'ATTITUDE':{limit:16,label:'ATTITUDE Limit: 16 characters'},
+ 'POPULAR':{limit:16,label:'POPULAR Limit: 16 characters'},
+ 'SYMBOLS':{limit:20,label:'SYMBOLS Limit: 20 characters'}
+};
+
+const categoryTemplates={
+ 'PUBG':[
+  '亗 {n} 亗','『 {n} 』','乂 {n} 乂','♛ {n} ♛','么 {n} 么','彡 {n} 彡',
+  '〆 {n} 〆','꧁༺ {n} ༻꧂','⚡ {n} ⚡','♠ {n} ♠','★彡 {n} 彡★','۝ {n} ۝',
+  '乄 {n} 乄','メ {n} メ'
+ ],
+ 'FREE FIRE':[
+  '꧁ {n} ꧂','亗 {n} 亗','乂 {n} 乂','么 {n} 么','彡 {n} 彡','★彡 {n} 彡★',
+  '᭄ {n} ᭄','『 {n} 』','࿐ {n} ࿐','メ {n} メ','⚡ {n} ⚡','꧁༺ {n} ༻꧂',
+  '×͜× {n} ×͜×','☠ {n} ☠'
+ ],
+ 'BGMI':[
+  '♛ {n} ♛','〆 {n} 〆','『 {n} 』','⚡ {n} ⚡','♠ {n} ♠','༺ {n} ༻',
+  '۝ {n} ۝','亗 {n} 亗','乂 {n} 乂','♕ {n} ♕','彡 {n} 彡','꧁ {n} ꧂',
+  '么 {n} 么','☯ {n} ☯'
+ ],
+ 'BOY':[
+  '亗 {n} 亗','乂 {n} 乂','♛ {n} ♛','⚡ {n} ⚡','么 {n} 么','彡 {n} 彡',
+  '『 {n} 』','ツ {n} ツ','★ {n} ★','メ {n} メ','♠ {n} ♠','༒ {n} ༒'
+ ],
+ 'ATTITUDE':[
+  '亗 {n} 亗','乂 {n} 乂','♛ {n} ♛','༒ {n} ༒','⚡ {n} ⚡','×͜× {n} ×͜×',
+  '彡 {n} 彡','꧁༺ {n} ༻꧂','☠ {n} ☠','♠ {n} ♠','么 {n} 么','〆 {n} 〆'
+ ],
+ 'POPULAR':[
+  '꧁ {n} ꧂','『 {n} 』','么 {n} 么','★ {n} ★','ツ {n} ツ','〆 {n} 〆',
+  '♛ {n} ♛','亗 {n} 亗','彡 {n} 彡','♡ {n} ♡','⚡ {n} ⚡'
+ ],
+ 'SYMBOLS':[
+  '✦ {n} ✦','✧ {n} ✧','❖ {n} ❖','✿ {n} ✿','➳ {n} ➳','⟡ {n} ⟡',
+  '⊹ {n} ⊹','☯ {n} ☯','♜ {n} ♜','♞ {n} ♞','❀ {n} ❀','✪ {n} ✪'
+ ]
+};
+
+const generatedStyles=[
+ n=>`乂 ${n} 乂`,n=>`亗 ${n} 亗`,n=>`꧁${n}꧂`,n=>`『${n}』`,n=>`♛ ${n} ♛`,
+ n=>`么${n}么`,n=>`彡${n}彡`,n=>`༺${n}༻`,n=>`ツ${n}ツ`,n=>`メ${n}メ`,
+ n=>`★ ${n} ★`,n=>`⚡${n}⚡`,n=>`〆${n}〆`,n=>`♠ ${n} ♠`,n=>`࿐${n}࿐`,
+ n=>`◥${n}◤`,n=>`᭄${n}᭄`,n=>`☯ ${n} ☯`,n=>`×͜× ${n} ×͜×`,n=>`★彡${n}彡★`,
+ n=>`♕ ${n} ♕`,n=>`༒ ${n} ༒`,n=>`۝ ${n} ۝`,n=>`⟡ ${n} ⟡`,
+ n=>`« ${n} »`,n=>`「 ${n} 」`,n=>`〖 ${n} 〗`,n=>`⟬ ${n} ⟭`,
+ n=>`⫷ ${n} ⫸`,n=>`≼ ${n} ≽`,n=>`⊰ ${n} ⊱`,n=>`☾ ${n} ☽`,
+ n=>`☬ ${n} ☬`,n=>`✞ ${n} ✞`,n=>`⌖ ${n} ⌖`,n=>`⍣ ${n} ⍣`,
+ n=>`ꗥ ${n} ꗥ`,n=>`ϟ ${n} ϟ`,n=>`◆ ${n} ◆`,n=>`々 ${n} 々`
+];
+
+function parseLoveNames(raw){
+ const trimmed=raw.trim();
+ if(!trimmed)return {single:'Your Name',isPair:false,first:'Your Name',second:''};
+ // Explicit separators like &, +, x, /
+ const sepMatch=trimmed.match(/^(.+?)\s*(?:&|\+|\/|×)\s*(.+)$/);
+ if(sepMatch){
+  return {single:trimmed,isPair:true,first:sepMatch[1].trim(),second:sepMatch[2].trim()};
+ }
+ // Two whitespace-separated parts (e.g. "G G" or "Aman Riya")
+ const parts=trimmed.split(/\s+/).filter(Boolean);
+ if(parts.length===2){
+  return {single:trimmed,isPair:true,first:parts[0],second:parts[1]};
+ }
+ return {single:trimmed,isPair:false,first:trimmed,second:''};
+}
+
+function buildLoveDesigns(rawInput){
+ const parsed=parseLoveNames(rawInput);
+ const n=parsed.single;
+ if(parsed.isPair){
+  const a=parsed.first, b=parsed.second;
+  return [
+   `♡ ${a} ♡ ${b} ♡`,
+   `꧁♡ ${a} ♥ ${b} ♡꧂`,
+   `『 ${a} ❥ ${b} 』`,
+   `ᥫ᭡ ${a} & ${b} ᥫ᭡`,
+   `ღ ${a} + ${b} ღ`,
+   `༺♡ ${a} • ${b} ♡༻`,
+   `ꨄ ${a} ♡ ${b} ꨄ`,
+   `♥彡 ${a} × ${b} 彡♥`,
+   `❣ ${a} ❦ ${b} ❣`,
+   `♡ ${n} ♡`,
+   `꧁༺ ${n} ༻꧂`,
+   `ঌ ${a} ♥ ${b} ঌ`
+  ];
+ }
+ return [
+  `♡ ${n} ♡`,
+  `ღ ${n} ღ`,
+  `ᥫ᭡ ${n} ᥫ᭡`,
+  `❥ ${n} ❥`,
+  `♥ ${n} ♥`,
+  `ꨄ ${n} ꨄ`,
+  `ঌ ${n} ঌ`,
+  `♡彡 ${n} 彡♡`,
+  `『♡ ${n} ♡』`,
+  `❣ ${n} ❣`,
+  `༺♡ ${n} ♡༻`,
+  `꧁♥ ${n} ♥꧂`
+ ];
+}
+
+function getAllCategoryEntries(rawInput){
+ const n=rawInput.trim()||'Your Name';
+ const entries=[];
+ const seenText=new Set();
+ const pushEntry=(text,cat)=>{
+  if(seenText.has(text))return;
+  seenText.add(text);
+  entries.push({text,category:cat});
+ };
+ ['PUBG','FREE FIRE','BGMI','BOY','ATTITUDE','POPULAR','SYMBOLS'].forEach(cat=>{
+  categoryTemplates[cat].forEach(tpl=>pushEntry(tpl.replaceAll('{n}',n),cat));
+ });
+ buildLoveDesigns(rawInput).forEach(text=>pushEntry(text,'LOVE'));
+ return entries;
+}
+
+function getActiveCategory(){
+ return document.querySelector('.category-chip.active')?.dataset.category||'ALL';
+}
+
+function currentName(){return input.value.trim()||'Your Name'}
+
+function showToast(message='Copied!'){
+ toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>toast.classList.remove('show'),1800);
+}
+
+async function copyText(text){
+ try{
+   if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(text);}
+   else{
+     const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';
+     document.body.appendChild(area);area.focus();area.select();
+     const ok=document.execCommand('copy');area.remove();if(!ok)throw new Error('copy failed');
+   }
+   showToast('Copied!');
+   return true;
+ }catch(e){showToast('Copy not supported here');return false;}
+}
+
+function sortHomeByLikes(){
+ const rows=[...list.querySelectorAll('.name-item')];
+ rows.sort((a,b)=>{
+  const likesA=getCardStat(a.dataset.statKey).likes;
+  const likesB=getCardStat(b.dataset.statKey).likes;
+  // Each complete block of 11 likes moves a nickname up one rank.
+  // Within the same rank, preserve the original display order.
+  const rankA=Math.floor(likesA/11);
+  const rankB=Math.floor(likesB/11);
+  return rankB-rankA || Number(a.dataset.homeOrder)-Number(b.dataset.homeOrder);
+ });
+ rows.forEach(row=>list.appendChild(row));
+}
+
+function createNicknameCard(entry){
+ const value=entry.text;
+ const catLabel=entry.category;
+ const statKey=value;
+
+ const row=document.createElement('div');row.className='name-item';row.dataset.statKey=statKey;row.dataset.homeOrder=String(list.children.length);
+ const mainCol=document.createElement('div');mainCol.className='name-main';
+
+ const tag=document.createElement('span');tag.className='card-cat-tag';tag.textContent=catLabel;
+ const name=document.createElement('div');name.className='nickname';name.textContent=value;
+ const meta=document.createElement('div');meta.className='card-meta';
+
+ const likeBtn=document.createElement('button');likeBtn.type='button';likeBtn.className='react-btn';
+ const dislikeBtn=document.createElement('button');dislikeBtn.type='button';dislikeBtn.className='react-btn';
+ const pinBtn=document.createElement('button');pinBtn.type='button';pinBtn.className='react-btn';
+ const copyStat=document.createElement('span');copyStat.className='copy-stat';
+
+ function syncCardUI(){
+  const st=getCardStat(statKey);
+  const saved=isNicknameSaved(value);
+  likeBtn.textContent=`👍🏻 ${st.likes}`;
+  dislikeBtn.textContent=`👎🏻 ${st.dislikes}`;
+  pinBtn.textContent=saved?'📌 Pinned':'📌 Pin';
+  copyStat.textContent=`Copies: ${st.copies}`;
+  likeBtn.classList.toggle('active',st.vote==='like');
+  dislikeBtn.classList.toggle('active',st.vote==='dislike');
+  pinBtn.classList.toggle('active',saved);
+ }
+
+ // Shared Like: one vote per anonymous Firebase user for each nickname.
+ likeBtn.addEventListener('click',async()=>{
+  if(typeof window.castSharedLike!=='function'){
+   showToast('Shared likes are not configured yet');return;
+  }
+  likeBtn.disabled=true;
+  try{await window.castSharedLike(value);}
+  catch(err){showToast('Like could not be saved. Check connection.');}
+  finally{likeBtn.disabled=false;}
+ });
+ // Live count updates are broadcast to every visitor through Firebase.
+ if(typeof window.watchSharedLikes==='function'){
+  window.watchSharedLikes(value,(shared)=>{
+   const st=getCardStat(statKey);st.likes=shared.likes;st.vote=shared.voted?'like':(st.vote==='like'?null:st.vote);
+   cardStats[statKey]=st;likeBtn.textContent=`👍🏻 ${shared.likes}`;
+   likeBtn.classList.toggle('active',!!shared.voted);sortHomeByLikes();
+  });
+ }
+
+ dislikeBtn.addEventListener('click',()=>{
+  const st=getCardStat(statKey);
+  if(st.vote==='dislike'){
+   st.dislikes=Math.max(0,st.dislikes-1);
+   st.vote=null;
+  }else{
+   if(st.vote==='like'){
+    st.likes=Math.max(0,st.likes-1);
+   }
+   st.dislikes+=1;
+   st.vote='dislike';
+  }
+  cardStats[statKey]=st;saveCardStats();syncCardUI();sortHomeByLikes();
+ });
+
+ pinBtn.addEventListener('click',()=>{
+  toggleSaveNickname({text:value,category:catLabel});
+  syncCardUI();
+ });
+
+ meta.append(likeBtn,dislikeBtn,pinBtn,copyStat);
+ mainCol.append(tag,name,meta);
+
+ const btn=document.createElement('button');btn.type='button';btn.className='copy-btn';btn.textContent='COPY';
+ btn.addEventListener('click',async()=>{
+  const ok=await copyText(value);
+  if(ok){
+   const st=getCardStat(statKey);
+   st.copies+=1;
+   cardStats[statKey]=st;saveCardStats();syncCardUI();
+  }
+ });
+
+ syncCardUI();
+ row.append(mainCol,btn);
+ return row;
+}
+
+function renderEntries(entries){
+ list.innerHTML='';shownDesigns.clear();
+ const removedSamples=new Set(['█▄░█ ▄▀█ █▀▄▀█ █▀▀  \n█░▀█ █▀█ █░▀░█ ██▄  ','𝒩𝒶𝓂ℯ']);
+ entries.filter(item=>!removedSamples.has(item.text)).forEach(item=>{
+   if(shownDesigns.has(item.text))return;
+   shownDesigns.add(item.text);
+   list.appendChild(createNicknameCard(item));
+ });
+ sortHomeByLikes();
+ document.getElementById('resultCount').textContent=list.children.length+' Nicknames';
+}
+
+function getActiveLimit(){
+ const selected=getActiveCategory();
+ return (categoryConfig[selected]||categoryConfig['ALL']).limit;
+}
+
+function showLimitError(limitVal){
+ const error=document.getElementById('limitError');
+ const selected=getActiveCategory();
+ error.textContent=`${selected} limit is ${limitVal} characters. You can’t enter more.`;
+ error.hidden=false;
+ showToast(`Maximum ${limitVal} characters allowed for ${selected}`);
+}
+
+function updateCategoryUI(){
+ const selected=getActiveCategory();
+ const cfg=categoryConfig[selected]||categoryConfig['ALL'];
+ input.maxLength=cfg.limit;
+ const limitBadge=document.getElementById('categoryLimitBadge');
+ if(limitBadge)limitBadge.textContent=cfg.label;
+ const loveNote=document.getElementById('loveInputNote');
+ if(loveNote)loveNote.hidden=(selected!=='LOVE');
+}
+
+function createPinnedModalCard(entry){
+ const value=entry.text;
+ const catLabel=entry.category||'PINNED';
+ const statKey=value;
+
+ const row=document.createElement('div');row.className='name-item';
+ const mainCol=document.createElement('div');mainCol.className='name-main';
+
+ const tag=document.createElement('span');tag.className='card-cat-tag';tag.textContent=catLabel;
+ const name=document.createElement('div');name.className='nickname';name.textContent=value;
+ const meta=document.createElement('div');meta.className='card-meta';
+
+ const likeBtn=document.createElement('button');likeBtn.type='button';likeBtn.className='react-btn';
+ const dislikeBtn=document.createElement('button');dislikeBtn.type='button';dislikeBtn.className='react-btn';
+ const pinBtn=document.createElement('button');pinBtn.type='button';pinBtn.className='react-btn active';
+ const deleteBtn=document.createElement('button');deleteBtn.type='button';deleteBtn.className='react-btn delete-btn';
+ const copyStat=document.createElement('span');copyStat.className='copy-stat';
+
+ function syncModalCardUI(){
+  const st=getCardStat(statKey);
+  likeBtn.textContent=`👍🏻 ${st.likes}`;
+  dislikeBtn.textContent=`👎🏻 ${st.dislikes}`;
+  pinBtn.textContent=`📌 Pinned`;
+  deleteBtn.textContent=`🗑️ Delete`;
+  copyStat.textContent=`Copies: ${st.copies}`;
+  likeBtn.classList.toggle('active',st.vote==='like');
+  dislikeBtn.classList.toggle('active',st.vote==='dislike');
+ }
+
+ likeBtn.addEventListener('click',()=>{
+  const st=getCardStat(statKey);
+  if(st.vote==='like'){
+   st.likes=Math.max(0,st.likes-1);
+   st.vote=null;
+  }else{
+   if(st.vote==='dislike'){
+    st.dislikes=Math.max(0,st.dislikes-1);
+   }
+   st.likes+=1;
+   st.vote='like';
+  }
+  cardStats[statKey]=st;saveCardStats();syncModalCardUI();sortHomeByLikes();
+ });
+
+ dislikeBtn.addEventListener('click',()=>{
+  const st=getCardStat(statKey);
+  if(st.vote==='dislike'){
+   st.dislikes=Math.max(0,st.dislikes-1);
+   st.vote=null;
+  }else{
+   if(st.vote==='like'){
+    st.likes=Math.max(0,st.likes-1);
+   }
+   st.dislikes+=1;
+   st.vote='dislike';
+  }
+  cardStats[statKey]=st;saveCardStats();syncModalCardUI();sortHomeByLikes();
+ });
+
+ pinBtn.addEventListener('click',()=>{
+  toggleSaveNickname({text:value,category:catLabel});
+  renderPinnedModal();
+  refreshNames();
+ });
+
+ deleteBtn.addEventListener('click',()=>{
+  const idx=savedNicknames.findIndex(item=>item.text===value);
+  if(idx!==-1){
+   savedNicknames.splice(idx,1);
+   persistSavedNicknames();
+   showToast('Deleted from Pinned');
+   renderPinnedModal();
+   refreshNames();
+  }
+ });
+
+ meta.append(likeBtn,dislikeBtn,pinBtn,deleteBtn,copyStat);
+ mainCol.append(tag,name,meta);
+
+ const btn=document.createElement('button');btn.type='button';btn.className='copy-btn';btn.textContent='COPY';
+ btn.addEventListener('click',async()=>{
+  const ok=await copyText(value);
+  if(ok){
+   const st=getCardStat(statKey);
+   st.copies+=1;
+   cardStats[statKey]=st;saveCardStats();syncModalCardUI();sortHomeByLikes();
+  }
+ });
+
+ syncModalCardUI();
+ row.append(mainCol,btn);
+ return row;
+}
+
+function renderPinnedModal(){
+ const container=document.getElementById('pinnedListContainer');
+ const countBadge=document.getElementById('pinnedCountBadge');
+ container.innerHTML='';
+ if(!savedNicknames.length){
+  const empty=document.createElement('div');
+  empty.className='modal-empty';
+  empty.textContent='No pinned nicknames yet. Tap "📌 Pin" on any nickname card to pin it here.';
+  container.appendChild(empty);
+  if(countBadge)countBadge.textContent='0 nicknames pinned';
+ }else{
+  savedNicknames.forEach(item=>{
+   container.appendChild(createPinnedModalCard(item));
+  });
+  if(countBadge)countBadge.textContent=`${savedNicknames.length} nicknames pinned`;
+ }
+}
+
+function openPinnedModal(){
+ renderPinnedModal();
+ const modal=document.getElementById('pinnedModal');
+ modal.removeAttribute('hidden');
+ modal.style.display='flex';
+ document.getElementById('menu').classList.remove('open');
+}
+
+function closePinnedModal(){
+ const modal=document.getElementById('pinnedModal');
+ modal.setAttribute('hidden','true');
+ modal.style.display='none';
+}
+
+const PAGE_SIZE=20;
+let learnCursor=0;
+let currentEntries=[];
+
+function buildCurrentEntries(rawVal,selected){
+ const n=rawVal.trim()||'Your Name';
+ let entries=[];
+ if(selected==='LOVE'){
+  entries=buildLoveDesigns(rawVal).map(text=>({text,category:'LOVE'}));
+ }else if(selected==='ALL'){
+  entries=generatedStyles.map(fn=>({text:fn(n),category:'DESIGN'}));
+  entries=entries.concat(getAllCategoryEntries(rawVal));
+ }else{
+  entries=(categoryTemplates[selected]||[]).map(t=>({text:t.replaceAll('{n}',n),category:selected}));
+  // Keep each category browsable in the same 20-at-a-time pattern.
+  entries=entries.concat(generatedStyles.map(fn=>({text:fn(n),category:selected})));
+ }
+ const seen=new Set();
+ return entries.filter(item=>{
+  if(!item.text||seen.has(item.text))return false;
+  seen.add(item.text);return true;
+ });
+}
+
+function updateLearnButton(){
+ const button=document.getElementById('learnBtn');
+ const total=currentEntries.length;
+ if(learnCursor>=total){
+  button.textContent='NO MORE DESIGNS';
+  button.disabled=true;
+ }else{
+  button.textContent='LEARN MORE';
+  button.disabled=false;
+ }
+}
+
+function appendNextPage(){
+ const next=currentEntries.slice(learnCursor,learnCursor+PAGE_SIZE);
+ next.forEach(entry=>{
+  if(!shownDesigns.has(entry.text)){
+   shownDesigns.add(entry.text);
+   list.appendChild(createNicknameCard(entry));
+  }
+ });
+ sortHomeByLikes();
+ learnCursor+=next.length;
+ document.getElementById('resultCount').textContent=list.children.length+' Nicknames';
+ updateLearnButton();
+}
+
+function refreshNames(){
+ viewingSaved=false;
+ document.querySelector('.section-head h2').textContent='Nickname Designs';
+ updateCategoryUI();
+ const selected=getActiveCategory();
+ const limitVal=getActiveLimit();
+ const chars=[...input.value];
+ if(chars.length>limitVal){
+  input.value=chars.slice(0,limitVal).join('');
+  showLimitError(limitVal);
+ }
+ const length=[...input.value].length;
+ const counterBox=document.getElementById('counterBox');
+ // Show only the number of entered characters; keep the existing category max-length rules.
+ document.getElementById('counter').textContent=String(length);
+ counterBox.classList.remove('green','warning','red');
+ counterBox.classList.add(length>=12?'red':'green');
+
+ currentEntries=buildCurrentEntries(input.value,selected);
+ learnCursor=0;
+ shownDesigns.clear();
+ list.innerHTML='';
+ appendNextPage();
+ document.getElementById('learnBtn').style.display='block';
+}
+
+document.getElementById('generateBtn').addEventListener('click',()=>{
+ generatedMode=true;
+ refreshNames();
+});
+
+input.addEventListener('input',()=>{
+ const limitVal=getActiveLimit();
+ if([...input.value].length>limitVal){
+  input.value=[...input.value].slice(0,limitVal).join('');
+  showLimitError(limitVal);
+ }else{
+  document.getElementById('limitError').hidden=true;
+ }
+ refreshNames();fillDesignOptions();fillFontOptions();fillSpellingOptions();
+});
+
+input.addEventListener('keydown',e=>{
+ const limitVal=getActiveLimit();
+ const allowed=['Backspace','Delete','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Tab'];
+ if([...input.value].length>=limitVal&&!allowed.includes(e.key)&&!e.ctrlKey&&!e.metaKey){
+  e.preventDefault();
+  showLimitError(limitVal);
+ }
+});
+
+document.getElementById('clearBtn').addEventListener('click',()=>{
+ input.value='';document.getElementById('limitError').hidden=true;generatedMode=false;refreshNames();fillDesignOptions();fillFontOptions();fillSpellingOptions();input.focus();
+});
+
+document.getElementById('learnBtn').addEventListener('click',()=>{
+ if(learnCursor<currentEntries.length)appendNextPage();
+});
+
+document.getElementById('visibleBtn').addEventListener('click',()=>copyText(invisibleSpace));
+
+document.querySelectorAll('.tab').forEach(btn=>{
+ btn.addEventListener('click',()=>{
+   const id=btn.dataset.tab,panel=document.getElementById(id),wasOpen=panel.classList.contains('open');
+   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('open'));
+   if(!wasOpen){btn.classList.add('active');panel.classList.add('open');panel.scrollTop=0;}
+ });
+});
+
+document.querySelectorAll('.category-chip').forEach(chip=>{
+ chip.addEventListener('click',()=>{
+  document.querySelectorAll('.category-chip').forEach(item=>item.classList.remove('active'));
+  chip.classList.add('active');
+  document.getElementById('limitError').hidden=true;
+  refreshNames();
+ });
+});
+
+function closeToolPanels(){
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('open'));
+}
+input.addEventListener('focus',closeToolPanels);
+input.addEventListener('click',closeToolPanels);
+
+function panelName(id){return document.getElementById(id).value.trim()||'NAME'}
+// Popularity is tracked separately for each of the four tool boxes on this device.
+const OPTION_COPY_KEY='g4z_tool_option_copy_counts_v1';
+const OPTION_TOP_LIMIT=24; // within the requested 20–25 copy range
+function getOptionCopyCounts(){try{return JSON.parse(localStorage.getItem(OPTION_COPY_KEY)||'{}')}catch(e){return {}}}
+function optionStatKey(category,value){return category+'::'+value}
+function optionCopyCount(category,value){return Number(getOptionCopyCounts()[optionStatKey(category,value)]||0)}
+async function copyToolOption(category,value,action){
+ const ok=await (action?action():copyText(value));
+ if(ok){const counts=getOptionCopyCounts(),key=optionStatKey(category,value);counts[key]=(Number(counts[key])||0)+1;try{localStorage.setItem(OPTION_COPY_KEY,JSON.stringify(counts))}catch(e){};const host=document.getElementById(({DESIGN:'designOptions',FONTS:'fontOptions',SYMBOLS:'symbolOptions','SPELLING DESIGN':'spellingOptions'})[category]);if(host)sortPopularOptions(host,category);}
+ return ok;
+}
+function sortPopularOptions(host,category){
+ const rank=(item)=>{const count=optionCopyCount(category,item.dataset.optionValue);return count>=OPTION_TOP_LIMIT?999:Math.floor(count/3)};
+ const sortGroup=items=>items.sort((a,b)=>rank(b)-rank(a)||Number(a.dataset.baseOrder)-Number(b.dataset.baseOrder));
+ if(category==='SPELLING DESIGN'){
+  const children=[...host.children],groups=[];let heading=null,items=[];
+  const flush=()=>{if(heading||items.length)groups.push({heading,items:sortGroup(items)});heading=null;items=[]};
+  children.forEach(child=>{if(child.classList.contains('letter-heading')){flush();heading=child}else if(child.classList.contains('option'))items.push(child);else {flush();groups.push({other:child})}});flush();
+  host.replaceChildren();groups.forEach(group=>{if(group.heading)host.appendChild(group.heading);if(group.other)host.appendChild(group.other);(group.items||[]).forEach(item=>host.appendChild(item))});
+ }else sortGroup([...host.querySelectorAll('.option')]).forEach(item=>host.appendChild(item));
+}
+function addOption(containerId,label,action,category){
+ const host=document.getElementById(containerId);
+ const btn=document.createElement('button');btn.dataset.optionValue=String(label);btn.dataset.baseOrder=String(host.children.length);btn.className='option';if(label.includes('█▄░█'))btn.classList.add('ascii-design');btn.textContent=label;
+ btn.addEventListener('click',()=>category?copyToolOption(category,String(label),action):action());
+ host.appendChild(btn);if(category)sortPopularOptions(host,category);
+}
+
+// DESIGN tab
+const designItems=[
+ '乂 {n} 乂','〆 {n} 〆','꧁ {n} ꧂','♛ {n} ♛','『 {n} 』','么 {n} 么',
+ '★ {n} ★','ツ {n} ツ','亗 {n} 亗','彡 {n} 彡','༺ {n} ༻','࿐ {n} ࿐',
+ 'メ {n} メ','◥ {n} ◤','乄 {n} 乄','♠ {n} ♠','⚡ {n} ⚡','☯ {n} ☯',
+ '• {n} •','×͜× {n} ×͜×','᭄ {n} ᭄','★彡 {n} 彡★','♕ {n} ♕','♔ {n} ♔',
+ '✦ {n} ✦','✧ {n} ✧','༒ {n} ༒','۝ {n} ۝','۞ {n} ۞','۩ {n} ۩',
+ '【 {n} 】','《 {n} 》','〈 {n} 〉','⟡ {n} ⟡','⊹ {n} ⊹','꧁༺ {n} ༻꧂',
+ '« {n} »','「 {n} 」','〖 {n} 〗','⟬ {n} ⟭',
+ '⫷ {n} ⫸','≼ {n} ≽','⊰ {n} ⊱','☾ {n} ☽',
+ '☬ {n} ☬','✞ {n} ✞','⌖ {n} ⌖','⍣ {n} ⍣',
+ 'ꗥ {n} ꗥ','ϟ {n} ϟ','◆ {n} ◆','々 {n} 々'
+];
+function fillDesignOptions(){
+ const host=document.getElementById('designOptions');host.innerHTML='';
+ const name=panelName('designName');
+ [...new Set(designItems)].forEach(v=>{
+  const result=v.replaceAll('{n}',name);
+  if([...host.children].some(child=>child.dataset.optionValue===result))return;
+  addOption('designOptions',result,()=>copyText(result),'DESIGN');
+ });
+}
+document.getElementById('designName').addEventListener('input',fillDesignOptions);
+fillDesignOptions();
+
+// FONTS tab
+const fontSets=[
+ {label:'Bold',upper:0x1D400,lower:0x1D41A},
+ {label:'Italic',upper:0x1D434,lower:0x1D44E},
+ {label:'Bold Italic',upper:0x1D468,lower:0x1D482},
+ {label:'Monospace',upper:0x1D670,lower:0x1D68A},
+ {label:'Sans',upper:0x1D5A0,lower:0x1D5BA},
+ {label:'Sans Bold',upper:0x1D5D4,lower:0x1D5EE},
+ {label:'Sans Italic',upper:0x1D608,lower:0x1D622},
+ {label:'Sans Bold Italic',upper:0x1D63C,lower:0x1D656},
+ {label:'Script',upper:0x1D4D0,lower:0x1D4EA},
+ {label:'Fraktur',upper:0x1D504,lower:0x1D51E},
+ {label:'Double Struck',upper:0x1D538,lower:0x1D552},
+ {label:'Fullwidth',upper:0xFF21,lower:0xFF41}
+];
+const fontAlphabetSets=[
+ {label:'User Sample',chars:[...'𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏']},
+ {label:'Small Capital',chars:[...'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ']},
+ {label:'Script Small',chars:[...'𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃']},
+ {label:'Double Struck Small',chars:[...'𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫']},
+ {label:'Decorative Capital',chars:[...'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ']},
+ {label:'Regional Indicator',chars:[...'🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿']},
+ {label:'Squared Alphabet',chars:[...'🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉']},
+ {label:'Fraktur Small',chars:[...'𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷']}
+];
+function stylize(str,set){
+ return [...str].map(ch=>{
+  const c=ch.codePointAt(0);
+  if(c>=65&&c<=90)return String.fromCodePoint(set.upper+c-65);
+  if(c>=97&&c<=122)return String.fromCodePoint(set.lower+c-97);
+  if(set.label==='Fullwidth'&&c>=48&&c<=57)return String.fromCodePoint(0xFF10+c-48);
+  return ch;
+ }).join('');
+}
+function mapAlphabet(str,chars){
+ return [...str].map(ch=>{
+  const c=ch.toUpperCase().charCodeAt(0);
+  return c>=65&&c<=90?(chars[c-65]||ch):ch;
+ }).join('');
+}
+function fillFontOptions(){
+ const name=document.getElementById('fontsName').value.trim()||input.value.trim();
+ const host=document.getElementById('fontOptions');host.innerHTML='';
+ if(!name){addOption('fontOptions','Type your name above first',()=>showToast('Type your name first'));return;}
+ fontSets.forEach(set=>{
+  const preview=stylize(name,set);
+  if([...host.children].some(child=>child.dataset.optionValue===preview))return;
+  addOption('fontOptions',preview,()=>copyText(preview),'FONTS');
+ });
+ fontAlphabetSets.forEach(set=>{
+  const preview=mapAlphabet(name,set.chars);
+  if([...host.children].some(child=>child.dataset.optionValue===preview))return;
+  addOption('fontOptions',preview,()=>copyText(preview),'FONTS');
+ });
+}
+document.getElementById('fontsName').addEventListener('input',fillFontOptions);
+fillFontOptions();
+
+// SYMBOLS tab:
+// 1. Top rows: compact, high-utility Free Fire & PUBG nickname symbols
+// 2. Around rows 4-6 (2-column grid -> items ~7-12): Allah & Urdu symbols
+// 3. Animal emojis/designs removed; lower-utility decorative symbols placed at bottom
+const orderedSymbols=[
+ '亗','乂','么','彡','꧁','꧂',
+ '『','』','','♛','♚','★','ツ','〆',
+ '«', '»', '「', '」', '〖', '〗', '⟬', '⟭', '⫷', '⫸', '≼', '≽',
+ 'ღ', '❥', 'ϟ', '一', '◆', '☽', '☬', '✞', '々', '⌖', '⍣', 'ꗥ',
+ 'メ','◥','◤','乄','♠','⚡',
+ '☯','᭄','×͜×','࿐','༺','༻',
+ '♕','♔','✦','✧','★彡','彡★',
+ '🅥','Ⓥ','☠','☣','☢','⚔',
+ '♜','♞','♟','♤','♡','♥',
+ '♦','♣','✿','❀','❖','✪',
+ '✯','✰','✵','✴','✳','➳',
+ '➵','➺','➻','➼','➽','➸',
+ '➹','༒','࿇','۩','๛','ミ',
+ '☘︎','愛','✘','☸','♨','𖤍',
+ '☪','☂︎','㊙','ᯤ','⚕','☕︎',
+ '➠','↻','☾','➤','⚓︎','™',
+ '《','》','【','】','〈','〉',
+ '⟡','⦿','⊹','⊱','⊰','•',
+ '፝֟፝֟','꧁༺','༻꧂','『』','乂乂','´ཀ`',
+ '﷽','﴾﷽﴿','ﷲ','ٱلْحَمْدُ لِلَّٰهِ','۞','۝',
+ 'ॐ', 'ૐ', '࿆'
+];
+
+function isIPhoneDevice(){
+ // Best-effort browser detection. The Apple logo glyph is an Apple-platform private-use character.
+ return /iPhone|iPod/i.test(navigator.userAgent||'');
+}
+
+async function copyAppleLogo(){
+ if(!isIPhoneDevice()){
+  showToast('Error: The Apple logo only works on iPhone.');
+  return false;
+ }
+ return copyText('');
+}
+
+function fillSymbols(){
+ const q=document.getElementById('symbolsSearch').value.trim();
+ const host=document.getElementById('symbolOptions');host.innerHTML='';
+ const seen=new Set();
+ const wantsApple=/apple|iphone|logo/i.test(q);
+ const symbols=wantsApple?['']:orderedSymbols;
+ symbols
+  .filter(s=>s!=='ꫝ' && s.trim()!=='')
+  .filter(s=>!q||s.includes(q)|| (s===''&&wantsApple))
+  .forEach(s=>{
+   if(seen.has(s))return;
+   seen.add(s);
+   if(s===''){
+    addOption('symbolOptions','',copyAppleLogo,'SYMBOLS');
+   }else{
+    addOption('symbolOptions',s,()=>copyText(s),'SYMBOLS');
+   }
+  });
+}
+document.getElementById('symbolsSearch').addEventListener('input',fillSymbols);
+fillSymbols();
+
+// SPELLING DESIGN tab
+const letterMaps=[
+ {label:'Bold',u:0x1D400,l:0x1D41A},{label:'Italic',u:0x1D434,l:0x1D44E},
+ {label:'Bold Italic',u:0x1D468,l:0x1D482},{label:'Sans',u:0x1D5A0,l:0x1D5BA},
+ {label:'Sans Bold',u:0x1D5D4,l:0x1D5EE},{label:'Sans Italic',u:0x1D608,l:0x1D622},
+ {label:'Sans Bold Italic',u:0x1D63C,l:0x1D656},{label:'Monospace',u:0x1D670,l:0x1D68A},
+ {label:'Script',u:0x1D4D0,l:0x1D4EA},{label:'Fraktur',u:0x1D504,l:0x1D51E},
+ {label:'Double Struck',u:0x1D538,l:0x1D552},{label:'Fullwidth',u:0xFF21,l:0xFF41}
+];
+const letterVariants={
+ A:['𝔄','ꫝ','𝕬','𝔸','𝓐','𝒜','Ａ','ꪖ','ɑׁׅ֮','ꍏ','ᴀ','∀','A⃣','A⃞','🄰','A','Å̶̢̰͒͌̃̇','🅰','ₐ','ᴬ','Ⓐ','ค','ǟ','Ꮧ','ą','𝐀','𝗔','𝘈','𝘼','𝙰','Λ','α','Ä','₳','卂','ﾑ','【A】','『A』','≋A≋','░A░','A̶','A̴','A̷','A̲','A̳','A̾','A͎','A͓̽','Ⱥ','ᗩ','𝒜','ά','𝔞','ᵃ','✌︎'],
+ B:['ß','🅱','🇧','В','₿','𝑏','𝓫','ᗷ','ʙ'],
+ C:['©','🇨','𝐂','€','☾','ᑕ','ᴄ'],
+ D:['🇩','𝐃','𝒟','ძ','𝒅','ᗪ','ᴅ'],
+ E:['𝑬','🇪','𝔼','୧','𝑒','ᴇ'],
+ F:['🇫','𝓕','𝒥','𝓯','ƒ','ᖴ','ғ'],
+ G:['🇬','ɢ','𝓖','ℊ','𝓰'],
+ H:['Ⓗ','🇭','ℋ','|-|','𝓗','♄','ℌ','ᕼ'],
+ I:['🇮','𝑰','┃','𝒾','﹗','ɪ'],
+ J:['𝓣','🇯','𝐣','ʝ','ᒍ'],
+ K:['🇰','𝒦','🅺','ʞ','𝒌'],
+ L:['𝑳','🇱','ℒ','ʟ','|','ᒪ'],
+ M:['𝓜','🇲','Ⓜ','𝐌','ᙏ','𝓂','𝐦'],
+ N:['🇳','𝓝','Nྀི','nྀི','𓎆','И','ɴ'],
+ O:['🇴','𝒐','⚬','𝟎','♡','☺'],
+ P:['𝓹','🇵','𝐏','℘'],
+ Q:['🇶','𝕢','𝓺','𝖖'],
+ R:['®','🇷','ℛ','Ʀ','𝐫'],
+ S:['🇸','🆂','𝓢','𝐒','𝐬','𝓼','ᔕ'],
+ T:['🇹','𝓣','т','✝','⚚','𝓽'],
+ U:['🇺','∪','𝓾','𝕦','𝖚'],
+ V:['𝓥','𝐕','\\/','Ⓥ','🅥','🇻'],
+ W:['🇼','🆆','𝓦','ω','𝕨','ш'],
+ X:['🇽','✗','ﾒ','𝕏','༝','×','ㄨ','𝓍','א','᙭'],
+ Y:['🇾','𝓨','Ｙ','ꪗ','𝕪','ყ'],
+ Z:['🇿','☡','𐰁','ᶻ','𝗓','𝐙','ᘔ']
+};
+const spellingAlphabetSets=[
+ {label:'Small Capital',chars:[...'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ']},
+ {label:'Script Small',chars:[...'𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃']},
+ {label:'Double Struck Small',chars:[...'𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫']},
+ {label:'Decorative Capital',chars:[...'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ']},
+ {label:'Regional Indicator',chars:[...'🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿']},
+ {label:'Squared Alphabet',chars:[...'🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉']},
+ {label:'Fraktur Small',chars:[...'𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷']}
+];
+function styleLetter(ch,map){
+ const c=ch.codePointAt(0);
+ if(c>=65&&c<=90)return String.fromCodePoint(map.u+c-65);
+ if(c>=97&&c<=122)return String.fromCodePoint(map.l+c-97);
+ if(map.label==='Fullwidth'&&c>=48&&c<=57)return String.fromCodePoint(0xFF10+c-48);
+ return ch;
+}
+function fillSpellingOptions(){
+ const value=document.getElementById('spellingName').value||input.value;
+ const host=document.getElementById('spellingOptions');host.innerHTML='';
+ if(!value.trim()){
+  addOption('spellingOptions','Enter a letter or name above',()=>showToast('Enter a letter or name first'));
+  return;
+ }
+ [...value].forEach((ch,index)=>{
+  if(ch===' ')return;
+  const seenForLetter=new Set();
+  const addLetterOpt=res=>{
+   if(seenForLetter.has(res))return;
+   seenForLetter.add(res);
+   addOption('spellingOptions',res,()=>copyText(res),'SPELLING DESIGN');
+  };
+  const heading=document.createElement('div');heading.className='letter-heading';
+  heading.textContent=`LETTER ${index+1}: ${ch}`;host.appendChild(heading);
+  letterMaps.forEach(map=>{
+   addLetterOpt(styleLetter(ch,map));
+  });
+  (letterVariants[ch.toUpperCase()]||[]).forEach(result=>addLetterOpt(result));
+  spellingAlphabetSets.forEach(set=>{
+   const cp=[...set.chars];
+   const upper=ch.toUpperCase().charCodeAt(0);
+   const result=(upper>=65&&upper<=90)?(cp[upper-65]||ch):ch;
+   addLetterOpt(result);
+  });
+  [`『${ch}』`,`꧁${ch}꧂`,`乂${ch}乂`,`亗${ch}亗`,`★${ch}★`,`彡${ch}彡`,`༺${ch}༻`,`〆${ch}〆`]
+   .forEach(result=>addLetterOpt(result));
+ });
+}
+document.getElementById('spellingName').addEventListener('input',fillSpellingOptions);
+fillSpellingOptions();
+
+function applyAccentColor(color){
+ document.documentElement.style.setProperty('--accent',color);
+ const darkText=['#f5f5f5','#e5b72f','#a3a3a3','#ff7a00','#00bcd4','#20a765','#00a6a6'].includes(color);
+ document.documentElement.style.setProperty('--accent-ink',darkText?'#171717':'#ffffff');
+ document.documentElement.style.setProperty('--red',color);
+ document.documentElement.style.setProperty('--red2',color);
+ document.querySelector('meta[name=theme-color]')?.setAttribute('content',color);
+}
+
+document.querySelectorAll('.color-palette button').forEach(button=>{
+ button.style.backgroundColor=button.dataset.color;
+ button.addEventListener('click',()=>{
+  applyAccentColor(button.dataset.color);
+  showToast('Color changed');
+ });
+});
+
+document.getElementById('themeBtn').addEventListener('click',()=>{
+ document.body.classList.toggle('light');
+ document.getElementById('themeBtn').textContent=document.body.classList.contains('light')?'☾':'☼';
+});
+
+document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('menu').classList.toggle('open'));
+
+document.querySelectorAll('.menu button[data-info]').forEach(btn=>btn.addEventListener('click',()=>{
+ const box=document.getElementById('infoBox'),key=btn.dataset.info;
+ if(key==='home'){
+  box.style.display='none';
+  if(viewingSaved)refreshNames();
+  window.scrollTo({top:0,behavior:'smooth'});
+ }
+ else{box.textContent=key==='about'?'G4Z GAMER helps you create stylish gaming nicknames with designs, fonts and symbols.':'Contact details can be added here when you are ready.';box.style.display='block';}
+ document.getElementById('menu').classList.remove('open');
+}));
+
+document.getElementById('savedMenuBtn').addEventListener('click',()=>{
+ openPinnedModal();
+});
+
+document.getElementById('modalCloseBtn').addEventListener('click',closePinnedModal);
+document.getElementById('pinnedModal').addEventListener('click',e=>{
+ if(e.target===document.getElementById('pinnedModal')){
+  closePinnedModal();
+ }
+});
+
+// Restart button in 3-line menu: resets UI/settings without deleting saved Like/Dislike/Copy records
+document.getElementById('restartBtn').addEventListener('click',()=>{
+ input.value='';
+ document.getElementById('designName').value='';
+ document.getElementById('fontsName').value='';
+ document.getElementById('symbolsSearch').value='';
+ document.getElementById('spellingName').value='';
+ document.getElementById('limitError').hidden=true;
+ document.getElementById('infoBox').style.display='none';
+ generatedMode=false;
+ closeToolPanels();
+ document.querySelectorAll('.category-chip').forEach(chip=>{
+  chip.classList.toggle('active',chip.dataset.category==='ALL');
+ });
+ document.body.classList.remove('light');
+ document.getElementById('themeBtn').textContent='☼';
+ applyAccentColor('#ed303b');
+ document.querySelector('meta[name=theme-color]')?.setAttribute('content','#080808');
+ refreshNames();
+ fillDesignOptions();
+ fillFontOptions();
+ fillSymbols();
+ fillSpellingOptions();
+ document.getElementById('menu').classList.remove('open');
+ window.scrollTo({top:0,behavior:'smooth'});
+ showToast('Website reset to initial settings (saved stats kept)');
+});
+
+document.addEventListener('click',e=>{
+ if(!e.target.closest('#menu')&&!e.target.closest('#menuBtn'))document.getElementById('menu').classList.remove('open');
+});
+
+updateSavedMenuCount();refreshNames();fillDesignOptions();fillFontOptions();fillSymbols();fillSpellingOptions();
+</script>
+
+<!-- Shared global likes backend: Firebase Realtime Database + Anonymous Auth. -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js';
+import { getDatabase, ref, onValue, runTransaction } from 'https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAfL_d_jgG7Or5jhNqKMJuYs-zHLNCH29w',
+  authDomain: 'g4zgamer.firebaseapp.com',
+  databaseURL: 'https://g4zgamer-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'g4zgamer',
+  storageBucket: 'g4zgamer.firebasestorage.app',
+  messagingSenderId: '812027747085',
+  appId: '1:812027747085:web:5c1cbac7e771762d57ae44',
+  measurementId: 'G-5049MSVKN4'
+};
+
+const configured = !!(firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId && firebaseConfig.databaseURL);
+let auth=null, db=null, currentUser=null;
+const watchers=new Map();
+function sharedKey(text){
+  const bytes=new TextEncoder().encode(text);
+  let binary=''; bytes.forEach(b=>binary+=String.fromCharCode(b));
+  return btoa(binary).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');
+}
+function showBackendStatus(message){
+  const el=document.getElementById('sharedLikeStatus');
+  if(el)el.textContent=message;
+}
+if(!configured){
+  showBackendStatus('Global likes setup required: add your Firebase project config before publishing.');
+  window.castSharedLike=async()=>{throw new Error('Firebase config missing')};
+  window.watchSharedLikes=(text,callback)=>callback({likes:0,voted:false});
+}else{
+  try{
+    const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app);
+    const credential = await signInAnonymously(auth);
+    currentUser = credential.user;
+    onAuthStateChanged(auth,user=>{currentUser=user;});
+    showBackendStatus('Global likes connected');
+    window.watchSharedLikes=(text,callback)=>{
+      const key=sharedKey(text);
+      const unsubscribe=onValue(ref(db,'nicknameLikes/'+key),snapshot=>{
+        const data=snapshot.val()||{};
+        const voters=data.voters||{};
+        callback({likes:Number(data.likes)||0,voted:!!(currentUser&&voters[currentUser.uid])});
+      },error=>showBackendStatus('Likes connection error: '+error.message));
+      watchers.set(key,unsubscribe);
+    };
+    // Cards rendered before this Firebase module finished loading also get live subscriptions.
+    document.querySelectorAll('.name-item').forEach(row=>{
+      if(row.dataset.sharedLikeWatching==='1')return;
+      const nameEl=row.querySelector('.nickname');
+      const likeBtn=row.querySelector('.react-btn');
+      if(!nameEl||!likeBtn)return;
+      row.dataset.sharedLikeWatching='1';
+      const value=nameEl.textContent;
+      window.watchSharedLikes(value,shared=>{
+        const st=getCardStat(value);
+        st.likes=shared.likes;
+        st.vote=shared.voted?'like':(st.vote==='like'?null:st.vote);
+        cardStats[value]=st;
+        likeBtn.textContent=`👍🏻 ${shared.likes}`;
+        likeBtn.classList.toggle('active',!!shared.voted);
+        sortHomeByLikes();
+      });
+    });
+    window.castSharedLike=async(text)=>{
+      if(!currentUser)throw new Error('Anonymous sign-in is not ready');
+      const key=sharedKey(text),node=ref(db,'nicknameLikes/'+key),uid=currentUser.uid;
+      await runTransaction(node,current=>{
+        current=current&&typeof current==='object'?current:{likes:0,voters:{}};
+        current.voters=current.voters&&typeof current.voters==='object'?current.voters:{};
+        if(current.voters[uid]){
+          delete current.voters[uid];
+          current.likes=Math.max(0,(Number(current.likes)||0)-1);
+        }else{
+          current.voters[uid]=true;
+          current.likes=(Number(current.likes)||0)+1;
+        }
+        return current;
+      });
+    };
+  }catch(error){
+    console.error(error);showBackendStatus('Firebase setup/error: '+error.message);
+    window.castSharedLike=async()=>{throw error};
+    window.watchSharedLikes=(text,callback)=>callback({likes:0,voted:false});
+  }
+}
+</script>
+
+</body>
+</html>
